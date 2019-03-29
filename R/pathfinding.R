@@ -15,6 +15,8 @@ GetDropboxPath <- function(business = F){
 
   if (length(file_name) == 0)
     file_name <- list.files(paste(Sys.getenv(x = "LOCALAPPDATA"),"Dropbox", sep="/"), pattern = "*.json", full.names = T)
+  if (length(file_name) == 0)
+	stop("Dropbox not installed on your local machine"); break()
 
   if(business == T)
     return(fromJSON(txt = file_name)$business$path)
