@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 26 13:26:35 2019
-
-@author: wiz
-"""
-
 import numpy as np
 import pandas as pd
 import time
