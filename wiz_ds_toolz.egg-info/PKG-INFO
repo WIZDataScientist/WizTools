@@ -1,0 +1,14 @@
+Metadata-Version: 1.0
+Name: wiz-ds-toolz
+Version: 0.1
+Summary: python package for data science
+Home-page: UNKNOWN
+Author: Wilson Zhou
+Author-email: wilsonzhou92@gmail.com
+License: WIZ
+Description: # Example from
+        https://github.com/BillMills/python-package-example
+        
+        # Wrap it and Ship it
+        python setup.py sdist
+Platform: UNKNOWN
