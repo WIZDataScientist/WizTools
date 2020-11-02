@@ -4,6 +4,7 @@ dsToolz/__init__.py
 dsToolz/common.py
 dsToolz/dates.py
 dsToolz/plot.py
+dsToolz/sql.py
 dsToolz/wrangling.py
 wiz_ds_toolz.egg-info/PKG-INFO
 wiz_ds_toolz.egg-info/SOURCES.txt

@@ -34,6 +34,7 @@ def piePlot(counter: Counter, labels: str = None, title: str = None, savepath: s
         plt.savefig(savepath) 
 
 
+
 def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hue: List[str] = None, hue_lines: List[str] = None, hue_lines_colors: List[str] = None, na_values = dt.date.today(), ax: Axes = None):
 
     if ax is None:
@@ -65,7 +66,7 @@ def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hu
     end__ = [pd.Timestamp(na_values) if unfinished else e for e, unfinished in zip(end, isUnfinished)]
     
     if hue_lines is None:
-        plt.hlines(case_index, xmin = start, xmax = end__)
+        ax.hlines(case_index, xmin = start, xmax = end__)
     
     # if hue_lines non-empty
     elif hue_lines is not None:
@@ -80,7 +81,7 @@ def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hu
         hue_lines_unique = uniqueList(hue_lines)
         
         
-        plt.hlines(case_index, xmin = start, xmax = end__, colors = hue_line_colors, zorder=1)
+        ax.hlines(case_index, xmin = start, xmax = end__, colors = hue_line_colors, zorder=1)
         
         # legend
         handles_lines = [mlines.Line2D([], [], color=hue_lines_colors[i], marker='_', markersize=15, label=label) for i, label in enumerate(hue_lines_unique)]
@@ -91,10 +92,10 @@ def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hu
             ax.legend(handles = handles_lines)
         
         
-    
     ax.set(xlabel = 'Year', ylabel = 'Case Index')
-    plt.gca().invert_yaxis()
-    plt.yticks(ticks=case_index, labels=case_index)
+    ax.set_yticks(case_index)
+    ax.set_yticklabels(case_index)
+    ax.invert_yaxis()
     
 def kpiPlot(title: str, info: Union[int, str], color: str, ax: Axes):
     ax.pie([1], colors = [color], labels=[""])
