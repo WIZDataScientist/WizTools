@@ -35,7 +35,7 @@ def piePlot(counter: Counter, labels: str = None, title: str = None, savepath: s
 
 
 
-def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hue: List[str] = None, hue_lines: List[str] = None, hue_lines_colors: List[str] = None, na_values = dt.date.today(), ax: Axes = None):
+def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hue: List[str] = None, hue_lines: List[str] = None, hue_lines_colors: List[str] = None, na_values = dt.date.today(), ax: Axes = None, **kwargs):
 
     if ax is None:
         fig, ax = plt.subplots()
@@ -53,7 +53,7 @@ def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hu
     
     # Plot - get dots
     if hue is None:
-        sns.scatterplot(x = date, y = case_index, color = 'blue', ax = ax)
+        sns.scatterplot(x = date, y = case_index, color = 'blue', ax = ax, **kwargs)
     else:
         if type(hue) != list and hue is not None:
             hue = list(hue)
@@ -92,10 +92,12 @@ def casePlot(case_index: List[int], start: List[dt.date], end: List[dt.date], hu
             ax.legend(handles = handles_lines)
         
         
+    
     ax.set(xlabel = 'Year', ylabel = 'Case Index')
     ax.set_yticks(case_index)
     ax.set_yticklabels(case_index)
     ax.invert_yaxis()
+
     
 def kpiPlot(title: str, info: Union[int, str], color: str, ax: Axes):
     ax.pie([1], colors = [color], labels=[""])
