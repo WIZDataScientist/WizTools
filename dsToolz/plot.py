@@ -28,11 +28,13 @@ def piePlot(counter: Counter, rename_labels: dict = None, title: str = None, sav
         belowThreshold = [(category, share) for category, share in normalized.items() if share <  min_share]
         otherShare     = [(other_category, sum(share for category, share in belowThreshold))]
         
-        normalized     = Counter(dict(aboveThreshold + otherShare))
+        if len(belowThreshold) > 0:
+            normalized     = Counter(dict(aboveThreshold + otherShare))
+        
         normalized     = Counter(dict(normalized.most_common()))
         
-        explode        = [0       if c != other_category else 0.1  for c    in normalized.keys()]
-        colors         = [f'C{i}' if c != other_category else 'C7' for i, c in enumerate(normalized.keys())]
+        explode        = [0       if c != other_category else min(0.55, 0.07/(s**0.4))  for c, s in normalized.items()]
+        colors         = [f'C{i}' if c != other_category else 'C7'                     for i, c in enumerate(normalized.keys())]
         
     else:
         normalized = Counter(dict(normalized.most_common()))    
@@ -42,9 +44,9 @@ def piePlot(counter: Counter, rename_labels: dict = None, title: str = None, sav
     sizes      = normalized.values()
 
     if rename_labels is None:
-        labels = list(normalized.keys())
+        labels = ['None' if k is None else k for k in normalized.keys()]
     else:
-        labels = [rename_labels.get(k, k) for k in normalized.keys()]
+        labels = ['None' if k is None else rename_labels.get(k, k) for k in normalized.keys()]
     
     ax.pie(sizes, explode=explode, colors = colors, labels=labels, autopct=f'%1.{digits}f%%', startangle=startangle)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
