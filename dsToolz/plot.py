@@ -13,15 +13,38 @@ from typing import List, Union
 
 from .common import normalizeCounter, prettyNumber, uniqueList
 
-def piePlot(counter: Counter, labels: str = None, title: str = None, savepath: str = None, digits: int = 0, startangle: int = 0, explode: list = None, colors = None, ax = None):
+def piePlot(counter: Counter, rename_labels: dict = None, title: str = None, savepath: str = None, digits: int = 0, startangle: int = 0, min_share: float = None, other_category = 'Andre', ax = None):
 
     if ax is None:
         fig, ax = plt.subplots()
     
-    sizes = normalizeCounter(counter).values()
+    normalized = normalizeCounter(counter)
+    
+    if min_share is not None:
+    
+        assert other_category not in normalized.keys(), f'other_category = "{other_category}" is already observed in counter'
+        
+        aboveThreshold = [(category, share) for category, share in normalized.items() if share >= min_share]
+        belowThreshold = [(category, share) for category, share in normalized.items() if share <  min_share]
+        otherShare     = [(other_category, sum(share for category, share in belowThreshold))]
+        
+        normalized     = Counter(dict(aboveThreshold + otherShare))
+        normalized     = Counter(dict(normalized.most_common()))
+        
+        explode        = [0       if c != other_category else 0.1  for c    in normalized.keys()]
+        colors         = [f'C{i}' if c != other_category else 'C7' for i, c in enumerate(normalized.keys())]
+        
+    else:
+        normalized = Counter(dict(normalized.most_common()))    
+        explode    = None
+        colors     = None
+        
+    sizes      = normalized.values()
 
-    if labels is None:
-        labels = list(counter.keys())
+    if rename_labels is None:
+        labels = list(normalized.keys())
+    else:
+        labels = [rename_labels.get(k, k) for k in normalized.keys()]
     
     ax.pie(sizes, explode=explode, colors = colors, labels=labels, autopct=f'%1.{digits}f%%', startangle=startangle)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
@@ -32,6 +55,7 @@ def piePlot(counter: Counter, labels: str = None, title: str = None, savepath: s
 
     if savepath is not None:
         plt.savefig(savepath) 
+
 
 
 
